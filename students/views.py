@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import RequestContext, loader
@@ -11,7 +13,19 @@ from django.template import RequestContext, loader
 # Views for students
 
 def students_list(request):
-	return render(request, 'students/index.html', {})
+	students = (
+		{'id': 1,
+		 'first_name': u'Павло',
+		 'last_name': u'Пукач',
+		 'ticket': 1488,
+		 'image': 'img/zoncolorBright.png'},
+		{'id': 2,
+		 'first_name': u'Віктор',
+		 'last_name': u'Садовий',
+		 'ticket': 1489,
+		 'image': 'img/zoncolorMono.png'},
+		)
+	return render(request, 'students/index.html', {'students': students})
 def students_add(request):
 	return HttpResponse('<h1>Student add form</h1>')
 def students_edit(request, sid):
