@@ -1,5 +1,9 @@
 {% load staticfiles %}
 
+{% url "home" as home %}
+{% url "groups" as groups %}
+{% url "journal" as journal %}
+
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -18,7 +22,7 @@
 		  href="https://cdn.jsdelivr.net/bootstrap/3.3.0/css/bootstrap.min.css">
 	<link rel="stylesheet"
 		  type="text/css" 
-		  href="{{PORTAL_URL}}{% static "css/main.css" %}">
+		  href="{{ PORTAL_URL }}{% static "css/main.css" %}">
 
 	<!-- This is only a TEST style to show the element borders
 	<!--<style type="text/css">
@@ -41,7 +45,9 @@
 			
 			<!-- LOGO -->
 			<div class="col-xs-8">
-				<h1>Сервіс Обліку Студентів</h1>
+				<h1>{% block logo %}
+					
+				{% endblock logo %}</h1>
 			</div>
 			
 			<!-- Groups selector-->
@@ -64,23 +70,20 @@
 		<div class="row" id="sub-header">
 			<div class="col-xs-12">
 				<ul class="nav nav-tabs">
-  					<li role="presentation" {% if request.path == '/' %}
-  						class="active" 
-  					{% endif %}>
+  					<li role="presentation" 
+  						class="{% ifequal home request.path %}active{% endifequal %}">
   						 <a href="{% url "home" %}">
   						 	Студенти
   						 </a>
   					</li>
-  					<li role="presentation" {% if '/journal' in request.path %}
-  						class="active" 
-  					{% endif %}>
-  						<a href="#">
+  					<li role="presentation" 
+  						class="{% if journal in request.path %}active{% endif %}">
+  						<a href="{% url "journal" %}">
   							Відвідування
   						</a>
   					</li>
-  					<li role="presentation" {% if '/groups' in request.path %}
-  						class="active" 
-  					{% endif %}>
+  					<li role="presentation"
+  						class="{% if groups in request.path %}active{% endif %}">
   						<a href="{% url "groups" %}">
   							Групи
   						</a>
