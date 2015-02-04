@@ -25,7 +25,7 @@ def students_list(request):
 		 'ticket': 1489,
 		 'image': 'img/zoncolorMono.png'},
 		)
-	return render(request, 'students/index.html', {'students': students})
+	return render(request, 'students/students_view.html', {'students': students})
 def students_add(request):
 	return HttpResponse('<h1>Student add form</h1>')
 def students_edit(request, sid):

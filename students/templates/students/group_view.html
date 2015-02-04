@@ -1,0 +1,71 @@
+{% extends "students/base.html" %}
+
+{% load staticfiles %}
+
+{% block meta_title %}Групи{% endblock meta_title %}
+
+{% block title %}База груп{% endblock title %}
+
+{% block content %}
+<a class="btn btn-primary" href="#">
+	Додати Групу
+</a>
+<table class="table table-strip table-hover">
+	<thead>
+		<tr>
+			<th>#</th>
+			<th><a href="">Назва &uarr;</a></th>
+			<th><a href="">Староста</a></th>
+			<th>Дії</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>1</td>
+			<td><a href="1/edit" title="Редагувати">ПМ-21</a></td>
+			<td><a href="1/edit" title="Редагувати">Гутор Валерія</a></td>
+			<td>
+			<div class="dropdown">
+ 				<button class="btn btn-default dropdown-toggle" 
+ 						type="button" 
+ 						id="dropdownMenu1" 
+ 						data-toggle="dropdown" 
+ 						aria-expanded="true">
+   					Дія
+   					<span class="caret"></span>
+  				</button>
+  					<ul class="dropdown-menu"
+  						role="menu" 
+  						aria-labelledby="dropdownMenu1">
+   						<li role="presentation">
+   							<a role="menuitem" tabindex="-1" href="1/edit">Редагувати</a>
+   						</li>
+   						<li role="presentation">
+   							<a role="menuitem" tabindex="-1" href="1/delete">Видалити</a>
+   						</li>
+  					</ul>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+
+<nav>
+  	<ul class="pagination">
+   		<li>
+   		  	<a href="#" aria-label="Previous">
+   		    	<span aria-hidden="true">&laquo;</span>
+   		  	</a>
+   		</li>
+   		<li class="active"><a href="#">1</a></li>
+   		<li><a href="#">2</a></li>
+   	 	<li>
+   		  	<a href="#" aria-label="Next">
+   		    	<span aria-hidden="true">&raquo;</span>
+   		  	</a>
+   		</li>
+  	</ul>
+</nav>
+<!-- End Main Content -->
+
+{% endblock content %}
