@@ -1,5 +1,4 @@
 {% load staticfiles %}
-
 {% url "home" as home %}
 {% url "groups" as groups %}
 {% url "journal" as journal %}
@@ -8,54 +7,54 @@
 <html lang="uk">
 <head>
 	<meta charset="UTF-8" />
-	<title>Сервіс Обліку Студентів - {% block meta_title %}	
+	<title>Сервіс Обліку Студентів - {% block meta_title %}
 	{% endblock meta_title %}</title>
-	
+
 	<!-- METADATA Section -->
-	<meta name="description" 
+	<meta name="description"
 		  value="Система обліку Студентів Навчального Закладу" />
 	<meta name="viewport"
 		  content="width=device-width, initial-scale=1">
-	
+
 	<!-- Styles Section -->
 	<link rel="stylesheet"
 		  href="https://cdn.jsdelivr.net/bootstrap/3.3.0/css/bootstrap.min.css">
 	<link rel="stylesheet"
-		  type="text/css" 
+		  type="text/css"
 		  href="{{ PORTAL_URL }}{% static "css/main.css" %}">
 
-	<!-- This is only a TEST style to show the element borders
+	<!-- This is only a TEST style to show the element borders -->
 	<!--<style type="text/css">
 			.col-xs-12, .col-xs-8, .col-xs-4{
 				border: 1px solid red;
 			}
 		</style>
 	-->
-	
+
 	{% block extra_css %}	{% endblock extra_css %}
 
 </head>
 <body>
-	
+
 	<!-- Start Container -->
 	<div class="container">
-		
+
 		<!-- Start Header -->
 		<div class="row" id="header">
-			
+
 			<!-- LOGO -->
 			<div class="col-xs-8">
 				<h1>{% block logo %}
-					
+
 				{% endblock logo %}</h1>
 			</div>
-			
+
 			<!-- Groups selector-->
 			<div class="col-xs-4" id="group-selector">
 				<strong>Група:</strong>
 				<select>
 					<option value=""> Усі студенти</option>
-					<option value=""> 
+					<option value="">
 						ПМ-21
 					</option>
 					<option value="">
@@ -65,18 +64,18 @@
 			</div>
 		</div>
 		<!-- End Header-->
-		
+
 		<!-- Start Subheader -->
 		<div class="row" id="sub-header">
 			<div class="col-xs-12">
 				<ul class="nav nav-tabs">
-  					<li role="presentation" 
+  					<li role="presentation"
   						class="{% ifequal home request.path %}active{% endifequal %}">
   						 <a href="{% url "home" %}">
   						 	Студенти
   						 </a>
   					</li>
-  					<li role="presentation" 
+  					<li role="presentation"
   						class="{% if journal in request.path %}active{% endif %}">
   						<a href="{% url "journal" %}">
   							Відвідування
@@ -92,18 +91,18 @@
 			</div>
 		</div>
 		<!-- End Subheader -->
-		
+
 		<!-- Start MAIN content-->
 		<div class="row" id="content-columns">
-			
+
 			<div class="col-xs-12" id="content-column">
-				
+
 				{% comment "Not used alerts so far" %}
 				<!-- Status message -->
 				<div class="alert alert-warning"> Status Update </div>
 				{% endcomment %}
 					<h2> {% block title %}{% endblock title %} </h2>
-				{% block content %}	
+				{% block content %}
 				{% endblock content %}
 			</div>
 		</div>
@@ -113,7 +112,7 @@
 		<div class="row" id="footer">
 
 			<div class="col-xs-12">
-				&copy; 2015 Сервіс Обліку Студентів 
+				&copy; 2015 Сервіс Обліку Студентів
 			</div>
 
 		</div>
