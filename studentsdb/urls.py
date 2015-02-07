@@ -11,7 +11,7 @@ urlpatterns = patterns('',
 
     # Groups urls
     url(r'^groups/$', 'students.views.groups.list', name='groups'),
-    url(r'^groups/add$', 'students.views.groups.add', name='add_groups'),
+    url(r'^groups/add$', 'students.views.groups.add', name='groups_add'),
     url(r'^groups/(?P<gid>\d+)/edit$', 'students.views.groups.edit', name='groups_edit'),
     url(r'^groups/(?P<gid>\d+)/delete$', 'students.views.groups.delete', name='groups_delete'),
 

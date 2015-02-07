@@ -9,23 +9,34 @@
 {% block logo %}Сервіс Обліку Студентів{% endblock logo %}
 
 {% block content %}
-<a class="btn btn-primary" href="#">
+
+<a class="btn btn-primary" href="{% url "groups_add" %}">
 	Додати Групу
 </a>
+{% with order_by=request.GET.order_by reverse=request.GET.reverse %}
+    
+
 <table class="table table-strip table-hover">
 	<thead>
 		<tr>
 			<th>#</th>
-			<th><a href="">Назва &uarr;</a></th>
-			<th><a href="">Староста</a></th>
+			<th><a href="{% url "groups" %}?order_by=title{% if order_by == 'title' and reverse != '1' %}&amp;reverse=1{% endif %}">Назва 
+			{% if order_by == 'title' and reverse != '1' %} &darr;
+			{% elif order_by == 'title' and reverse == '1' %} &uarr;
+			{% endif %}</a></th>
+			<th><a href="{% url "groups" %}?order_by=leader{% if order_by == 'leader' and reverse != '1' %}&amp;reverse=1{% endif %}">Староста
+			{% if order_by == 'leader' and reverse != '1' %} &darr;
+			{% elif order_by == 'leader' and reverse == '1' %} &uarr;
+			{% endif %}</a></th>
 			<th>Дії</th>
 		</tr>
 	</thead>
 	<tbody>
+	{% for group in groupobj  %}
 		<tr>
-			<td>1</td>
-			<td><a href="1/edit" title="Редагувати">ПМ-21</a></td>
-			<td><a href="1/edit" title="Редагувати">Гутор Валерія</a></td>
+			<td>{{ forloop.counter }}</td>
+			<td><a href="{% url "groups_edit" group.id %}" title="Редагувати">{{ group.title }}</a></td>
+			<td><a href="{% url "groups_edit" group.id %}" title="Редагувати">{% if group.leader  %}{{ group.leader }} {% else %} "Немає"{% endif %}</a></td>
 			<td>
 			<div class="dropdown">
  				<button class="btn btn-default dropdown-toggle" 
@@ -40,16 +51,18 @@
   						role="menu" 
   						aria-labelledby="dropdownMenu1">
    						<li role="presentation">
-   							<a role="menuitem" tabindex="-1" href="1/edit">Редагувати</a>
+   							<a role="menuitem" tabindex="-1" href="{% url "groups_edit" group.id %}">Редагувати</a>
    						</li>
    						<li role="presentation">
-   							<a role="menuitem" tabindex="-1" href="1/delete">Видалити</a>
+   							<a role="menuitem" tabindex="-1" href="{% url "groups_delete" group.id %}">Видалити</a>
    						</li>
   					</ul>
 			</td>
 		</tr>
+	{% endfor %}
 	</tbody>
 </table>
+{% endwith %}
 
 {% include "students/pagination.html" %}
 

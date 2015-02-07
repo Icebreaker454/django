@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.template import RequestContext, loader
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from ..models import Student
+from ..models.student import Student
 
 #def students_list(request):
 #	template = loader.get_template('index.html')
