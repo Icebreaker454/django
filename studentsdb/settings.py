@@ -8,9 +8,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
+# -*- coding: utf-8-*-
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 from django.conf import global_settings
+from .db import DATABASES
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -59,12 +62,6 @@ WSGI_APPLICATION = 'studentsdb.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, '..', 'db.sqlite3'),
-    }
-}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
@@ -95,4 +92,5 @@ TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
     )
 
 MEDIA_URL = '/media/'
+
 MEDIA_ROOT = os.path.join(BASE_DIR, '..', 'media')
