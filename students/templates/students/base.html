@@ -2,6 +2,7 @@
 {% url "home" as home %}
 {% url "groups" as groups %}
 {% url "journal" as journal %}
+{% url "exams" as exams %}
 
 <!DOCTYPE html>
 <html lang="uk">
@@ -86,6 +87,12 @@
   						<a href="{% url "groups" %}">
   							Групи
   						</a>
+  					</li>
+  					<li role="presentstion"
+  						class="{% if exams in request.path %}active{% endif %}">
+						<a href="{% url "exams" %}">
+							Іспити
+						</a>
   					</li>
 				</ul>
 			</div>

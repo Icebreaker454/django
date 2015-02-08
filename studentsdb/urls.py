@@ -16,7 +16,13 @@ urlpatterns = patterns('',
     url(r'^groups/(?P<gid>\d+)/delete$', 'students.views.groups.delete', name='groups_delete'),
 
     # Journal urls
-    url(r'journal/$', 'students.views.journal.index', name="journal"),
+    url(r'^journal/$', 'students.views.journal.index', name="journal"),
+
+    # Exams urls
+    url(r'^exams/$', 'students.views.exams.index', name="exams"),
+    url(r'^exams/add$', 'students.views.exams.add', name="exams_add"),
+    url(r'^exams/(?P<eid>\d+)/edit$', 'students.views.exams.edit', name='exams_edit'),
+    url(r'^exams/(?P<eid>\d+)/delete$', 'students.views.exams.delete', name='exams_delete'),
 
     # Admin url
     url(r'^admin/', include(admin.site.urls)),

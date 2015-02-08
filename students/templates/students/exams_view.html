@@ -1,0 +1,83 @@
+{% extends "students/base.html" %}
+
+{% load staticfiles %}
+
+{% block meta_title %}Іспити{% endblock meta_title %}
+
+{% block title %}База іспитів{% endblock title %}
+
+{% block logo %}Сервіс Обліку Студентів{% endblock logo %}
+
+{% block content %}
+
+<table class="table table-strip table-hover">
+	<thead>
+		<tr>
+			<th>#</th>
+			<th>
+				<a href="">
+					Предмет
+				</a>
+			</th>
+			<th>
+				<a href="">
+					Час
+				</a>
+			</th>
+			<th>
+				<a href="">
+					Викладач
+				</a>
+			</th>
+			<th>
+				<a href="">
+					Група
+				</a>
+			</th>
+			<th>
+				<a href="">
+					Дії
+				</a>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for exam in exams_list %}
+		<tr>
+			<td>{{ forloop.counter }}</td>
+			<td><a title="Редагувати" href="{% url 'exams_edit' exam.id %}">{{ exam.course_name }}</td>
+			<td><a title="Редагувати" href="{% url 'exams_edit' exam.id %}">{{ exam.exam_date }}</td>
+			<td><a title="Редагувати" href="{% url 'exams_edit' exam.id %}">{% if exam.exam_teacher %}{{ exam.exam_teacher }}{% endif %}</td>
+			<td><a title="Редагувати" href="{% url 'exams_edit' exam.id %}">{{ exam.exam_group.title }}</td>
+			<td>
+				<div class="dropdown">
+					<button class="btn btn-default dropdown-toggle" 
+ 						type="button" 
+ 						id="dropdownMenu1" 
+ 						data-toggle="dropdown" 
+ 						aria-expanded="true">
+   						Дія
+   						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu"
+  						role="menu" 
+  						aria-labelledby="dropdownMenu1">
+   						<li role="presentation">
+   							<a role="menuitem" tabindex="-1" href="{% url 'exams_edit' exam.id %}">
+   								Редагувати
+   							</a>
+   						</li>
+   						<li role="presentation">
+   							<a role="menuitem" tabindex="-1" href="{% url 'exams_delete' exam.id %}">
+   								Видалити
+   							</a>
+   						</li>
+  					</ul>
+				</div>
+			</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
+
+{% endblock content %}

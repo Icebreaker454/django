@@ -17,8 +17,9 @@ from ..models.student import Student
 
 def list(request):
 	students = Student.objects.all()
-
-	# Try to order the list
+	#--------------------
+	# LIST ORDERING
+	#--------------------
 	order_by = request.GET.get('order_by', '')
 
 	if order_by in ('first_name', 'last_name', 'ticket'):
@@ -26,7 +27,13 @@ def list(request):
 
 		if request.GET.get('reverse', '') == '1':
 			students = students.reverse()
-	# Paginate the data
+	#--------------------
+	# END LIST ORDERING
+	#--------------------
+	# PAGINATE THE DATA
+	#--------------------
+	# VARIANT No.1
+	#--------------------
 	paginator = Paginator(students, 3)
 	page = request.GET.get('page')
 	try:
@@ -34,13 +41,22 @@ def list(request):
 	except PageNotAnInteger:
 		students = paginator.page(1)
 	except EmptyPage:
-		students = paginator.page(paginator.num_pages)
-
+	 	students = paginator.page(paginator.num_pages)
+	#--------------------	
+	# VARIANT No.2
+	#--------------------
+	# per_page = 3
+	# pagestr = request.GET.get('page', '1')
+	# if pagestr:
+	#	page = int(pagestr)
+	#	students = students[(page-1)*per_page:page*per_page]
+	#	page_num = []
+	#	for i in range(len(students) - 1):
+	#		page_num.append(i)
 
 	return render(request, 'students/students_view.html',
 		{
 			'students': students,
-			'page': page,
 		}
 	)
 def add(request):
