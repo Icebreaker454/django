@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from PIL import Image
+from datetime import datetime
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, loader
@@ -66,24 +68,82 @@ def add(request):
 	if request.method == 'POST':
 		# Checking if add button was clicked 
 		if request.POST.get('add_button') is not None:
+			errors = {}
 
-			# TODO: Validate input from user
-			errors = {}		
+			data = {
+				'middle_name': request.POST.get('middle_name'),
+				'notes': request.POST.get('notes')
+			}	
+
+			first_name = request.POST.get('first_name','').strip()
+			if first_name:
+				data['first_name'] = first_name
+			else:
+				errors['first_name'] = u"Ім'я є обов'язковим"
+
+			last_name = request.POST.get('last_name','').strip()
+			if last_name:
+				data['last_name'] = last_name
+			else:
+				errors['last_name'] = u"Прізвище є обов'язковим"
+
+			birthday = request.POST.get('birthday', '').strip()
+			if not birthday:
+				errors['birthday'] = u"Дата народження є обов'язковою"	
+			else:
+				try:
+					datetime.strptime(birthday, '%Y-%m-%d')
+				except Exception:
+					errors['birthday'] = u"Дата повинна бути у вигляді РРРР-ММ-ДД"
+				else:
+					data['birthday'] = birthday
+
+			
+					
+
+			ticket = request.POST.get('ticket','').strip()
+			if ticket:
+				data['ticket'] = ticket
+			else:
+				errors['ticket'] = u"Номер квитка є обов'язковим"
+
+			student_group = request.POST.get('student_group', '').strip()
+			if student_group:
+				groups = Group.objects.filter(pk=student_group)
+				if len(groups) != 1:
+					errors['student_group'] = u"Оберіть коректну групу"
+				else:
+					data['student_group'] = groups[0]
+			else:
+				errors['student_group'] = u"Поле групи є обов'язковим"
+
+			photo = request.FILES.get('photo')
+			if photo:
+				try:
+					i = Image.open(photo)
+					if i.size[0] > 1920 or i.size[1] > 1080:
+						errors['photo'] = u"Розмір фото не повинен перевищувати 1920х1080"
+					else:
+						data['photo'] = photo
+					
+				except Exception:
+					errors['photo'] = u"Файл непіходящого формату, або пошкоджений"
+	
 
 			# If there is no errors, we create a student from the user input
 			if not errors:
-				student = Student(
-					first_name = request.POST['first_name'],
-					last_name = request.POST['last_name'],
-					middle_name = request.POST['middle_name'],
-					birthday = request.POST['birthday'],
-					ticket = request.POST['ticket'],
-					photo = request.FILES['photo'],
-					student_group = Group.objects.get(pk = request.POST['student_group'])
-				)
-				# Saving the dtudent to database
+				student = Student(**data)
+				#	first_name = request.POST['first_name'],
+				#	last_name = request.POST['last_name'],
+				#	middle_name = request.POST['middle_name'],
+				#	birthday = request.POST['birthday'],
+				#	ticket = request.POST['ticket'],
+				#	photo = request.FILES['photo'],
+				#	student_group = Group.objects.get(pk = request.POST['student_group'])
+				#)
+				# Saving the student to database
 				student.save()
-				return HttpResponseRedirect(reverse('home'))
+				return HttpResponseRedirect(u"%s?status_message=Студента додано" % reverse('home'))
 
 			# If we do have errors, we render the form with errors and previous user input
 			else:
@@ -95,7 +155,7 @@ def add(request):
 				)
 		# if the cancel button was pressed, redirect to home
 		elif request.POST.get('cancel_button') is not None:
-			return HttpResponseRedirect(reverse('home'))
+			return HttpResponseRedirect(u"%s?status_message=Зміни скасовано" % reverse('home'))
 	# initial form render
 	else:
 		groups_list = Group.objects.all().order_by('title')

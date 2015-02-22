@@ -3,6 +3,7 @@
 {% url "groups" as groups %}
 {% url "journal" as journal %}
 {% url "exams" as exams %}
+{% url "contact_admin" as contact_admin %}
 
 <!DOCTYPE html>
 <html lang="uk">
@@ -94,6 +95,12 @@
 							Іспити
 						</a>
   					</li>
+  					<li role="presentation"
+  						class="{% if contact_admin in request.path %}active{% endif %}">
+  						<a href="{% url "contact_admin" %}">
+  							Контакти
+  						</a>
+  					</li>
 				</ul>
 			</div>
 		</div>
@@ -103,11 +110,19 @@
 		<div class="row" id="content-columns">
 
 			<div class="col-xs-12" id="content-column">
+				{% block status_message %}
+					
 
-				{% comment "Not used alerts so far" %}
 				<!-- Status message -->
-				<div class="alert alert-warning"> Status Update </div>
-				{% endcomment %}
+				{% if request.GET.status_message %}
+					
+				
+				<div class="alert alert-warning">
+					{{ request.GET.status_message }}
+				</div>
+				{% endif %}
+				{% endblock status_message %}
+
 					<h2> {% block title %}{% endblock title %} </h2>
 				{% block content %}
 				{% endblock content %}
