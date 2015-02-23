@@ -19,9 +19,9 @@ from .mail import EMAIL_HOST_PASSWORD
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 ADMIN_EMAIL = 'pavlopukach@gmail.com'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 465
-EMAIL_HOST_USER = 'pavlopukach@gmail.com'
+EMAIL_HOST = 'in-v3.mailjet.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = '36b95d4fe797826c4dccc31525c3be04'
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 
