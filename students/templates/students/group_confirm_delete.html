@@ -1,0 +1,24 @@
+{% extends "students/base.html" %}
+
+{% load staticfiles %}
+
+{% load crispy_forms_tags %}
+
+{% block meta_title %}Редагувати Студента{% endblock meta_title %}
+
+{% block title %}Редагувати Студента{% endblock title %}
+
+{% block logo %}Сервіс Обліку Студентів{% endblock logo %}
+
+{% block status_message %}
+{% endblock status_message %}
+
+{% block content %}
+
+<form action="{% url 'groups_delete' object.id %}" method="post">
+	{% csrf_token %}
+	<p>Ви дійсно хочете видалити групу "{{ object }}"?</p>
+	<input type="submit" name="delete_button" class="btn btn-danger" value="Так" /><br /><br />
+</form>
+
+{% endblock content %}

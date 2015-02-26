@@ -10,7 +10,7 @@
 
 {% block content %}
 
-<a class="btn btn-primary" href="{% url "groups_add" %}">
+<a class="btn btn-primary" href="{% url "add_group" %}">
 	Додати Групу
 </a>
 {% with order_by=request.GET.order_by reverse=request.GET.reverse %}

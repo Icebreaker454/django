@@ -14,13 +14,13 @@ class ContactForm(forms.Form):
 	def __init__(self, *args, **kwargs):
 
 		super(ContactForm, self).__init__(*args, **kwargs)
-    	# This helper allows to customize the form 
-		self.helper = FormHelper()
-
+ 	   	# This helper allows to customize the form 
+		
+	    	self.helper = FormHelper()
 		# Form tag attributes
 		self.helper.form_class = 'form-horizontal'
 		self.helper.form_method = 'post'
-		self.helper.form_action = 'contact_admin'
+		self.helper.form_action = reverse('contact_admin')
 
 		# Twitter Bootstrap stypes
 		self.helper.help_text_inline = True

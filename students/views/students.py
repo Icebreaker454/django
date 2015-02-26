@@ -2,14 +2,45 @@
 
 from PIL import Image
 from datetime import datetime
+
+from django.forms import ModelForm
+from crispy_forms.bootstrap import FormActions
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
+
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, loader
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
+from django.views.generic import UpdateView, DeleteView
 from ..models.student import Student
 from ..models.group import Group
+
+class StudentUpdateForm(ModelForm):
+	class Meta:
+		model = Student
+
+	def __init__(self, *args, **kwargs):
+		super(StudentUpdateForm, self).__init__(*args, **kwargs)
+
+		self.helper = FormHelper(self)
+
+		self.helper.form_action = reverse('students_edit', kwargs={'pk':kwargs['instance'].id})
+		self.helper.form_method = 'POST'
+		self.helper.form_class = 'form-horizontal'
+
+		self.helper.help_text_inline = True
+		self.helper.html5_required = True
+		self.helper.label_class = 'col-sm-2 control-label'
+		self.helper.field_class = 'col-sm-10'
+
+		self.helper.layout[-1] = FormActions(
+			Submit('add_button', u"Зберегти", css_class="btn btn-primary"),
+			Submit('cancel-button', u"Скасувати", css_class="btn btn-link"),
+		)
+
+
 
 #def students_list(request):
 #	template = loader.get_template('index.html')
@@ -20,7 +51,7 @@ from ..models.group import Group
 # Views for students
 
 def list(request):
-	students = Student.objects.all()
+	students = Student.objects.order_by('last_name')
 	#--------------------
 	# LIST ORDERING
 	#--------------------
@@ -165,7 +196,25 @@ def add(request):
 				'groups_list': groups_list
 			}
 		)	
-def edit(request, sid):
-	return HttpResponse('<h1>Edit Student %s</h1>' % sid)
-def delete(request, sid):
-	return HttpResponse('<h1>Delete Student %s</h1>' % sid)
+
+
+class StudentUpdate(UpdateView):
+	    model = Student
+	    template_name = "students/students_edit.html"
+	    form_class = StudentUpdateForm
+
+	    def get_success_url(self):
+	    	return u"%s?status_message=Студента успішно додано!" % reverse('home')
+
+	    def post(self, request, *args, **kwargs):
+	    	if request.POST.get('cancel_button'):
+	    		return HttpResponseRedirect(u"%s?status_message=Редагування скасовано" % reverse('home'))
+	    	else:
+	    		return super(StudentUpdate, self).post(request, *args, **kwargs)
+
+class StudentDelete(DeleteView):
+		model = Student
+		template_name = 'students/students_confirm_delete.html'
+
+		def get_success_url(self):
+			return u"%s?status_message=Студента успішно видалено!" % reverse('home')
