@@ -4,18 +4,28 @@ from PIL import Image
 from datetime import datetime
 
 from django.forms import ModelForm
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.http import HttpResponseRedirect
+from django.template import RequestContext
+from django.template import loader
+from django.core.urlresolvers import reverse
+from django.core.paginator import Paginator
+from django.core.paginator import EmptyPage
+from django.core.paginator import PageNotAnInteger
+from django.views.generic import UpdateView
+from django.views.generic import DeleteView
+from django.views.generic import TemplateView
+from django.core.exceptions import ValidationError
 from crispy_forms.bootstrap import FormActions
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
-from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
-from django.template import RequestContext, loader
-from django.core.urlresolvers import reverse
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.views.generic import UpdateView, DeleteView
+
 from ..models.student import Student
-from ..models.group import Group
+from ..models.group import  Group
+from ..util import paginate
+
 
 class StudentUpdateForm(ModelForm):
 	class Meta:
@@ -39,61 +49,50 @@ class StudentUpdateForm(ModelForm):
 			Submit('add_button', u"Зберегти", css_class="btn btn-primary"),
 			Submit('cancel-button', u"Скасувати", css_class="btn btn-link"),
 		)
+	
+	def clean_student_group(self):
+		"""
+        Check whether the student is a group leader and raise a ValidationError
+        if that group differs from the student group
+        """
+		groups = Group.objects.filter(leader=self.instance)
+		if len(groups) > 0 and self.cleaned_data['student_group'] != groups[0]:
+			raise ValidationError(
+				u"Студент уже є старостою іншої групи",
+				code = 'invalid')
+		return self.cleaned_data['student_group']
 
 
+class StudentView(TemplateView):
+	""" The students index view """
+	template_name = 'students/students_view.html'
 
-#def students_list(request):
-#	template = loader.get_template('index.html')
-#	context = RequestContext(request, {})
-#	return HttpResponse(template.render(context))
-#EXACTLY THE SAME!
+	def get_context_data(self, **kwargs):
+		context = super(StudentView, self).get_context_data(**kwargs)		
 
-# Views for students
+		order_by = self.request.GET.get('order_by', '')
+		reverse = self.request.GET.get('reverse', '')
 
-def list(request):
-	students = Student.objects.order_by('last_name')
-	#--------------------
-	# LIST ORDERING
-	#--------------------
-	order_by = request.GET.get('order_by', '')
+		students = Student.objects.all()
 
-	if order_by in ('first_name', 'last_name', 'ticket'):
-		students = students.order_by(order_by)
+		if order_by in ('first_name', 'last_name', 'ticket'):
+			students = students.order_by(order_by)
+			if reverse == '1':
+				students = students.reverse()
+		else:
+			students = Student.objects.order_by('last_name')
 
-		if request.GET.get('reverse', '') == '1':
-			students = students.reverse()
-	#--------------------
-	# END LIST ORDERING
-	#--------------------
-	# PAGINATE THE DATA
-	#--------------------
-	# VARIANT No.1
-	#--------------------
-	paginator = Paginator(students, 3)
-	page = request.GET.get('page')
-	try:
-		students = paginator.page(page)
-	except PageNotAnInteger:
-		students = paginator.page(1)
-	except EmptyPage:
-	 	students = paginator.page(paginator.num_pages)
-	#--------------------	
-	# VARIANT No.2
-	#--------------------
-	# per_page = 3
-	# pagestr = request.GET.get('page', '1')
-	# if pagestr:
-	#	page = int(pagestr)
-	#	students = students[(page-1)*per_page:page*per_page]
-	#	page_num = []
-	#	for i in range(len(students) - 1):
-	#		page_num.append(i)
+		context = paginate(
+			students,
+			10,
+			self.request,
+			context,
+			var_name='students'
+		)
 
-	return render(request, 'students/students_view.html',
-		{
-			'students': students,
-		}
-	)
+		return context
+
+
 def add(request):
 	# Checking whether the method is Post
 	if request.method == 'POST':
@@ -204,7 +203,7 @@ class StudentUpdate(UpdateView):
 	    form_class = StudentUpdateForm
 
 	    def get_success_url(self):
-	    	return u"%s?status_message=Студента успішно додано!" % reverse('home')
+	    	return u"%s?status_message=Студента успішно відредаговано!" % reverse('home')
 
 	    def post(self, request, *args, **kwargs):
 	    	if request.POST.get('cancel_button'):

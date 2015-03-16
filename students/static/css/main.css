@@ -23,6 +23,13 @@ h1, h2, h3, h4, h5, h6 {
 	margin: 10px 0;
 }
 
+#ajax-progress-indicator {
+	display: none;
+}
+#ajax-error-handling {
+	display: none;
+}
+
 #group-selector select {
 	margin: 0;
 	width: 85%;
@@ -31,6 +38,13 @@ h1, h2, h3, h4, h5, h6 {
 	height: 30px;
 	line-height: 30px;
 	color: #555555;
+}
+
+td.day-box,
+th.day-header {
+	padding: 4px !important;
+	vertical-align: middle;
+	text-align: center;
 }
 
 textarea,

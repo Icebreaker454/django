@@ -2,7 +2,7 @@
 
 {% load staticfiles %}
 
-{% block meta_title %}Додати Групу{% endblock meta_title %}
+{% block meta_title %}{{ block.super }} - Додати Групу{% endblock meta_title %}
 
 {% block title %}Додати Групу{% endblock title %}
 
@@ -37,7 +37,7 @@
 		<div class="col-sm-10">
 			<select name="leader" id="leader">
 				<option value="">Виберіть Студента</option>
-				{% for student in students_list  %}
+				{% for student in students  %}
 					<option value="{{ student.id }}" 
 					{% if student.id == request.POST.leader|add:0 %}selected="1"{% endif %}>{{ student }}
 					</option>	

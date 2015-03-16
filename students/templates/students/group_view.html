@@ -2,11 +2,13 @@
 
 {% load staticfiles %}
 
-{% block meta_title %}Групи{% endblock meta_title %}
+{% block meta_title %}{{ block.super }} - Групи{% endblock meta_title %}
 
 {% block title %}База груп{% endblock title %}
 
 {% block logo %}Сервіс Обліку Студентів{% endblock logo %}
+
+{% url 'groups' as groups %}
 
 {% block content %}
 
@@ -63,6 +65,9 @@
 	</tbody>
 </table>
 {% endwith %}
+
+
+{% include 'students/pagination.html' with object_list=groupobj url=groups %}    
 
 <!-- End Main Content -->
 

@@ -9,9 +9,10 @@
 <html lang="uk">
 <head>
 	<meta charset="UTF-8" />
-	<title>Сервіс Обліку Студентів - {% block meta_title %}
+	<title>{% block meta_title %}Сервіс Обліку Студентів
 	{% endblock meta_title %}</title>
 
+    {% block css %}
 	<!-- METADATA Section -->
 	<meta name="description"
 		  value="Система обліку Студентів Навчального Закладу" />
@@ -33,7 +34,7 @@
 		</style>
 	-->
 
-	{% block extra_css %}	{% endblock extra_css %}
+	{% endblock css %}
 
 </head>
 <body>
@@ -142,15 +143,16 @@
 	</div>
 	<!-- End Container -->
 
+        
+    {% block js %}    
+
 	<!-- Javascripts Section -->
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
 	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    </script>
+    <script src="{% static 'js/main.js' %}"></script>
 
 
 
-	{% block extra_js %}	
-
-	{% endblock extra_js %}
+	{% endblock js %}
 </body>
 </html>

@@ -2,11 +2,13 @@
 
 {% load staticfiles %}
 
-{% block meta_title %}Студенти{% endblock meta_title %}
+{% block meta_title %}{{ block.super }} - Студенти{% endblock meta_title %}
 
 {% block title %}База Студентів{% endblock title %}
 
 {% block logo %}Сервіс Обліку Студентів{% endblock logo %}
+
+{% url 'home' as home %}
 
 {% block content %}
 
@@ -92,6 +94,6 @@
 </table>
 <!-- End Students table -->
 
-{% include "students/pagination.html" %}
+{% include "students/pagination.html" with object_list=students url=home %}
 
 {% endblock content %}

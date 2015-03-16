@@ -1,24 +1,31 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+
+
 from .settings import DEBUG, MEDIA_ROOT
-from students.views.students import StudentUpdate, StudentDelete
-from students.views.groups import GroupUpdateView, GroupDeleteView
+from students.views.students import StudentUpdate
+from students.views.students import StudentDelete
+from students.views.groups import GroupUpdateView
+from students.views.groups import GroupDeleteView
+from students.views.journal import JournalView
+from students.views.students import StudentView
+from students.views.groups import GroupView
 
 urlpatterns = patterns('',
     # Students urls
-    url(r'^$', 'students.views.students.list', name='home'),
+    url(r'^$', StudentView.as_view(), name='home'),
     url(r'^students/add$', 'students.views.students.add', name='add_student'),
     url(r'^students/(?P<pk>\d+)/edit$', StudentUpdate.as_view(), name='students_edit'),
     url(r'^students/(?P<pk>\d+)/delete$', StudentDelete.as_view(), name='students_delete'),
 
     # Groups urls
-    url(r'^groups/$', 'students.views.groups.list', name='groups'),
+    url(r'^groups/$', GroupView.as_view(), name='groups'),
     url(r'^groups/add$', 'students.views.groups.add', name='add_group'),
     url(r'^groups/(?P<pk>\d+)/edit$', GroupUpdateView.as_view(), name='groups_edit'),
     url(r'^groups/(?P<pk>\d+)/delete$', GroupDeleteView.as_view(), name='groups_delete'),
 
     # Journal urls
-    url(r'^journal/$', 'students.views.journal.index', name="journal"),
+    url(r'^journal/', JournalView.as_view(), name="journal"),
 
     # Exams urls
     url(r'^exams/$', 'students.views.exams.index', name="exams"),
