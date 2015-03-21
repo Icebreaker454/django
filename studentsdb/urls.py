@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
@@ -10,8 +12,13 @@ from students.views.groups import GroupDeleteView
 from students.views.journal import JournalView
 from students.views.students import StudentView
 from students.views.groups import GroupView
+from students.views.exams import ExamView
+from students.views.exams import ExamAddView
+from students.views.exams import ExamUpdateView
+from students.views.exams import ExamDeleteView
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
     # Students urls
     url(r'^$', StudentView.as_view(), name='home'),
     url(r'^students/add$', 'students.views.students.add', name='add_student'),
@@ -25,13 +32,13 @@ urlpatterns = patterns('',
     url(r'^groups/(?P<pk>\d+)/delete$', GroupDeleteView.as_view(), name='groups_delete'),
 
     # Journal urls
-    url(r'^journal/', JournalView.as_view(), name="journal"),
+    url(r'^journal/(?P<pk>\d+)?/?', JournalView.as_view(), name="journal"),
 
     # Exams urls
-    url(r'^exams/$', 'students.views.exams.index', name="exams"),
-    url(r'^exams/add$', 'students.views.exams.add', name="exams_add"),
-    url(r'^exams/(?P<eid>\d+)/edit$', 'students.views.exams.edit', name='exams_edit'),
-    url(r'^exams/(?P<eid>\d+)/delete$', 'students.views.exams.delete', name='exams_delete'),
+    url(r'^exams/$', ExamView.as_view(), name='exams'),
+    url(r'^exams/add$', ExamAddView.as_view(), name='exams_add'),
+    url(r'^exams/(?P<pk>\d+)/edit$', ExamUpdateView.as_view(), name='exams_edit'),
+    url(r'^exams/(?P<pk>\d+)/delete$', ExamDeleteView.as_view(), name='exams_delete'),
 
     # Admin contact url
     url(r'^contact_admin/$', 'students.views.contact_admin.index', name='contact_admin'),
@@ -41,8 +48,11 @@ urlpatterns = patterns('',
 )
 
 if DEBUG:
-    urlpatterns += patterns('',
-        url(r'^media/(?P<path>.*)$', 'django.views.static.serve',
-            {'document_root': MEDIA_ROOT }
+    urlpatterns += patterns(
+        '',
+        url(
+            r'^media/(?P<path>.*)$',
+            'django.views.static.serve',
+            {'document_root': MEDIA_ROOT}
         )
     )

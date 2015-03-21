@@ -7,14 +7,15 @@ from calendar import monthrange
 from calendar import weekday
 from calendar import day_abbr
 
-from django.http import HttpResponse
 from django.http import JsonResponse
 from django.core.urlresolvers import reverse
-from django.views.generic.base import TemplateView
+from django.views.generic import TemplateView
 
 from ..models.student import Student
 from ..models.journal import MonthJournal
 from ..util import paginate
+from ..util import get_current_group
+
 
 class JournalView(TemplateView):
     """ The view class to display students month journal """
@@ -57,7 +58,15 @@ class JournalView(TemplateView):
         ]
 
         # Getting all students from database
-        queryset = Student.objects.order_by('last_name')
+        if kwargs.get('pk'):
+            queryset = [Student.objects.get(pk=kwargs['pk'])]
+        else:
+            queryset = Student.objects.order_by('last_name')
+
+        current_group = get_current_group(self.request)
+        if current_group:
+            queryset = Student.objects.filter(student_group=current_group)
+
         # Defining update url for AJAX methods
         update_url = reverse('journal')
 
@@ -68,7 +77,7 @@ class JournalView(TemplateView):
             # Try to get the journal for selected month
             try:
                 journal = MonthJournal.objects.get(student=student, date=month)
-            except Exception:
+            except MonthJournal.DoesNotExist:
                 journal = None
 
             # Fill days presence for current student
@@ -79,7 +88,7 @@ class JournalView(TemplateView):
                         'day': day,
                         'present': journal and getattr(
                             journal,
-                            'present_day%d' % (day),
+                            'present_day%d' % day,
                             False
                         ) or False,
                         'date': date(myear, mmonth, day).strftime('%Y-%m-%d')
@@ -101,7 +110,7 @@ class JournalView(TemplateView):
         # Apply pagination
         context = paginate(
             students,
-            10,
+            5,
             self.request,
             context,
             var_name='students'
@@ -109,6 +118,7 @@ class JournalView(TemplateView):
 
         # Return updated context with paginated students
         return context
+
 
     def post(self, request, *args, **kwargs):
         """ Method to trace and callback all POST requests """

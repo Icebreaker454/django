@@ -42,14 +42,18 @@ h1, h2, h3, h4, h5, h6 {
 
 td.day-box,
 th.day-header {
-	padding: 4px !important;
-	vertical-align: middle;
-	text-align: center;
+    padding: 4px !important;
+    vertical-align: middle;
+    text-align: center;
+}
+
+div.input-group {
+    max-width: 300px;
 }
 
 textarea,
 select,
 input
 {
-	max-width: 300px;
+    max-width: 300px;
 }

@@ -1,8 +1,8 @@
 {% load staticfiles %}
-{% url "home" as home %}
 {% url "groups" as groups %}
 {% url "journal" as journal %}
 {% url "exams" as exams %}
+{% url "home" as home %}
 {% url "contact_admin" as contact_admin %}
 
 <!DOCTYPE html>
@@ -22,19 +22,15 @@
 	<!-- Styles Section -->
 	<link rel="stylesheet"
 		  href="https://cdn.jsdelivr.net/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.0.0/css/bootstrap-datetimepicker.min.css"/>
 	<link rel="stylesheet"
 		  type="text/css"
 		  href="{{ PORTAL_URL }}{% static "css/main.css" %}">
 
-	<!-- This is only a TEST style to show the element borders -->
-	<!--<style type="text/css">
-			.col-xs-12, .col-xs-8, .col-xs-4{
-				border: 1px solid red;
-			}
-		</style>
-	-->
-
 	{% endblock css %}
+
+
 
 </head>
 <body>
@@ -56,13 +52,12 @@
 			<div class="col-xs-4" id="group-selector">
 				<strong>Група:</strong>
 				<select>
-					<option value=""> Усі студенти</option>
-					<option value="">
-						ПМ-21
-					</option>
-					<option value="">
-						ПМ-22
-					</option>
+					{% for group in GROUPS %}
+                    <option value="{{ group.id }}" {% if group.selected %}selected="1"{% endif %}>
+                        {{ group.title }} {% if group.leader %}- {{ group.leader }}                         
+                        {% endif %}
+                    </option>    
+                    {% endfor %}
 				</select>
 			</div>
 		</div>
@@ -73,7 +68,7 @@
 			<div class="col-xs-12">
 				<ul class="nav nav-tabs">
   					<li role="presentation"
-  						class="{% ifequal home request.path %}active{% endifequal %}">
+  						class="{% ifequal request.path home %}active{% endifequal %}{% if 'students' in request.path %}active{% endif %}">
   						 <a href="{% url "home" %}">
   						 	Студенти
   						 </a>
@@ -90,7 +85,7 @@
   							Групи
   						</a>
   					</li>
-  					<li role="presentstion"
+  					<li role="presentation"
   						class="{% if exams in request.path %}active{% endif %}">
 						<a href="{% url "exams" %}">
 							Іспити
@@ -143,16 +138,37 @@
 	</div>
 	<!-- End Container -->
 
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+            aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel"></h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
         
     {% block js %}    
 
 	<!-- Javascripts Section -->
-	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
-	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    <script src="{% static 'js/main.js' %}"></script>
+	    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+        <script src="{% static 'js/JQUERY_COOKIE/jquery.cookie.js' %}"></script>
+        <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+	    <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.0.0/js/bootstrap-datetimepicker.min.js"></script>
+        <script src="{% static 'js/main.js' %}"></script>
 
-
-
-	{% endblock js %}
+    {% endblock js %}
 </body>
 </html>
